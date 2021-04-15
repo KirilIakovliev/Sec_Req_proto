@@ -43,7 +43,7 @@ def set_header():
     st.markdown("Short desciption: So far **only** .pdf format is supported by the app. Uploading document must be in English. Big documents **are not recommended**.")
     st.markdown("Used models: BERT(based) and T5")
     st.markdown("Used datasets: PURE, PROMISE")
-    st.markdown("By VDO Tech Team")
+    st.markdown("By VDO Tech Team. Special thanks to Vyacheslav Yastrebov.")
     
 def bert_predict(model, test_dataloader):
     model.eval()
