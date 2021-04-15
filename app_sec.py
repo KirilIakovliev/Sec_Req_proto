@@ -95,7 +95,6 @@ def t5_predict(test_dataloader, model):
                 pred.append(pred_decoded)
     return pred
 
-@st.cache(suppress_st_warning=True)
 class T5Dataset(Dataset):
     def __init__(self, df, indices):
         super(T5Dataset, self).__init__()
