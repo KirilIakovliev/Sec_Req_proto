@@ -46,6 +46,7 @@ def set_header():
     st.markdown("Used datasets: PURE, PROMISE")
     st.markdown("By VDO Tech Team. Special thanks to Vyacheslav Yastrebov.")
     
+@st.cache(suppress_st_warning=True)  
 def bert_predict(model, test_dataloader):
     model.eval()
     all_logits = []
@@ -58,6 +59,7 @@ def bert_predict(model, test_dataloader):
     probs = F.softmax(all_logits, dim=1).cpu().numpy()
     return probs
 
+@st.cache(suppress_st_warning=True)
 def preprocessing_for_bert(data, MAX_LEN=200):
     input_ids = []
     attention_masks = []
@@ -75,6 +77,7 @@ def preprocessing_for_bert(data, MAX_LEN=200):
     attention_masks = torch.tensor(attention_masks)
     return input_ids, attention_masks
 
+@st.cache(suppress_st_warning=True)
 def t5_predict(test_dataloader, model):
     pred = []
     model.eval()
@@ -92,10 +95,7 @@ def t5_predict(test_dataloader, model):
                 pred.append(pred_decoded)
     return pred
 
-def load_model(model_path, device="cpu"):
-    model = T5ForConditionalGeneration.from_pretrained(model_path).to(device)
-    return model
-
+@st.cache(suppress_st_warning=True)
 class T5Dataset(Dataset):
     def __init__(self, df, indices):
         super(T5Dataset, self).__init__()
@@ -120,13 +120,7 @@ class T5Dataset(Dataset):
         return {'src_input_ids': src_input_ids.long(),
             'src_attention_mask': src_attention_mask.long()}
 
-def prepare_data_t5(dataframe, model_type, max_len):
-    tokenizer = T5Tokenizer.from_pretrained(model_type)
-    dataset = EncDataset(dataframe, tokenizer, False, max_len)
-    prepare_labels_mappings(tokenizer)
-    return tokenizer
-
-@st.cache()
+@st.cache(suppress_st_warning=True)
 def bert_step(model, tokenizer, dataset):
     batch_size = 4
     inputs, masks = preprocessing_for_bert(dataset['Text'])
@@ -139,7 +133,7 @@ def bert_step(model, tokenizer, dataset):
     sents = dataset.loc[dataset.index[pred_idx]]
     return sents
 
-@st.cache()
+@st.cache(suppress_st_warning=True)
 def t5_step(dataframe):
     dataset_size = len(dataframe)
     indices = list(range(dataset_size))
