@@ -3,7 +3,7 @@ import torch
 import pandas as pd
 import numpy as np
 import torch.nn as nn
-from streamlit import cahce
+from streamlit import cache
 from torch.utils.data import DataLoader
 from transformers import BertModel
 
