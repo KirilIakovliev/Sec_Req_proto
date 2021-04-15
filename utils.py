@@ -55,6 +55,7 @@ def load_spacy_model(name="en_core_web_sm"):
     nlp = spacy.load(name)
     return nlp
 
+st.cache(ttl=60*5,max_entries=20)
 def retrieve_sentences_from_lines(lines: List[str]) -> List[str]:
     nlp = load_spacy_model()
     extracted_sentences = []
@@ -67,6 +68,7 @@ def retrieve_sentences_from_lines(lines: List[str]) -> List[str]:
     filtered_sentences = list(set(filtered_sentences))
     return filtered_sentences
 
+st.cache(ttl=60*5,max_entries=20)
 def retrieve_lines_from_pdf_file(file_buffer: Optional[io.BytesIO]=None) -> List[str]:
     if not file_buffer:
         return []
@@ -93,7 +95,7 @@ def retrieve_lines_from_pdf_file(file_buffer: Optional[io.BytesIO]=None) -> List
     filtered_lines = list(filter(filter_line, concatenated_lines))
     return filtered_lines
   
-@st.cache()
+@st.cache(ttl=60*5,max_entries=20)
 def process_file(file_buffer: Optional[io.BytesIO]=None) -> List[str]:
     lines = retrieve_lines_from_pdf_file(file_buffer)
     sentences = retrieve_sentences_from_lines(lines)
