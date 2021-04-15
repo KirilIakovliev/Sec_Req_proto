@@ -92,7 +92,8 @@ def retrieve_lines_from_pdf_file(file_buffer: Optional[io.BytesIO]=None) -> List
             concatenated_lines[-1] = f"{line_1_text} {line_2_text}"
     filtered_lines = list(filter(filter_line, concatenated_lines))
     return filtered_lines
-    
+  
+@st.cache()
 def process_file(file_buffer: Optional[io.BytesIO]=None) -> List[str]:
     lines = retrieve_lines_from_pdf_file(file_buffer)
     sentences = retrieve_sentences_from_lines(lines)
