@@ -40,7 +40,8 @@ tokenizer_t5 = T5Tokenizer.from_pretrained(type_)
 
 def set_header():
     st.title("**Security Requirements Extraction Tool**")
-    st.markdown("Short desciption: So far **only** .pdf format is supported by the app. Uploading document must be written in English. Big documents **are not recommended**.")
+    st.markdown("Short desciption: So far **only** .pdf format is supported by the app. Big documents **are not recommended**.")
+    st.markdown("Supported language: English")
     st.markdown("Used models: BERT(based) and T5")
     st.markdown("Used datasets: PURE, PROMISE")
     st.markdown("By VDO Tech Team. Special thanks to Vyacheslav Yastrebov.")
