@@ -46,7 +46,7 @@ def set_header():
     st.markdown("Used datasets: PURE, PROMISE")
     st.markdown("Due to the resource limit, this app is unstable.")
     
-@st.cache(suppress_st_warning=True)  
+@st.cache(ttl=60*5,max_entries=20)  
 def bert_predict(model, test_dataloader):
     model.eval()
     all_logits = []
@@ -59,7 +59,7 @@ def bert_predict(model, test_dataloader):
     probs = F.softmax(all_logits, dim=1).cpu().numpy()
     return probs
 
-@st.cache(suppress_st_warning=True)
+@st.cache(ttl=60*5,max_entries=20)
 def preprocessing_for_bert(data, MAX_LEN=200):
     input_ids = []
     attention_masks = []
@@ -77,7 +77,7 @@ def preprocessing_for_bert(data, MAX_LEN=200):
     attention_masks = torch.tensor(attention_masks)
     return input_ids, attention_masks
 
-@st.cache(suppress_st_warning=True)
+@st.cache(ttl=60*5,max_entries=20)
 def t5_predict(test_dataloader, model):
     pred = []
     model.eval()
@@ -119,7 +119,7 @@ class T5Dataset(Dataset):
         return {'src_input_ids': src_input_ids.long(),
             'src_attention_mask': src_attention_mask.long()}
 
-@st.cache(suppress_st_warning=True)
+@st.cache(ttl=60*5,max_entries=20)
 def bert_step(model, tokenizer, dataset):
     batch_size = 4
     inputs, masks = preprocessing_for_bert(dataset['Text'])
@@ -132,7 +132,7 @@ def bert_step(model, tokenizer, dataset):
     sents = dataset.loc[dataset.index[pred_idx]]
     return sents
 
-@st.cache(suppress_st_warning=True)
+@st.cache(ttl=60*5,max_entries=20)
 def t5_step(dataframe):
     dataset_size = len(dataframe)
     indices = list(range(dataset_size))
