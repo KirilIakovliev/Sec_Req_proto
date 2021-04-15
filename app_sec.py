@@ -44,7 +44,7 @@ def set_header():
     st.markdown("Supported language: English")
     st.markdown("Used models: BERT(based) and T5")
     st.markdown("Used datasets: PURE, PROMISE")
-    st.markdown("By VDO Tech Team. Special thanks to Vyacheslav Yastrebov.")
+    st.markdown("Due to the resource limit, this app is unstable.")
     
 @st.cache(suppress_st_warning=True)  
 def bert_predict(model, test_dataloader):
