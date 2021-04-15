@@ -130,6 +130,7 @@ def bert_step(model, tokenizer, dataset):
     preds = probs[:, 1]
     pred_idx = list(np.where(preds >= 0.5))
     sents = dataset.loc[dataset.index[pred_idx]]
+    del dataset
     return sents
 
 @st.cache(ttl=60*5,max_entries=20)
