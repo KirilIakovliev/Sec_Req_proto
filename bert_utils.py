@@ -3,6 +3,7 @@ import torch
 import pandas as pd
 import numpy as np
 import torch.nn as nn
+from streamlit import cahce
 from torch.utils.data import DataLoader
 from transformers import BertModel
 
@@ -27,6 +28,7 @@ class BertClassifier(nn.Module):
         logits = self.classifier(last_hidden_state_cls)
         return logits
 
+cache()
 def text_preprocessing(text):
     text = re.sub(r'(@.*?)[\s]', ' ', text)
     text = re.sub(r'&amp;', '&', text)
