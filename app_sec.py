@@ -6,13 +6,14 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import streamlit as st
+from copy import deepcopy
 import torch.nn.functional as F
 from typing import Optional, Union
-from t5_utils import get_texts, clean_text, process_predictions
 from torch.utils.data import DataLoader
-from utils import process_file, show_extracted_sentences, download_model
 from bert_utils import BertClassifier, text_preprocessing
-from transformers import BertTokenizer, T5ForConditionalGeneration, T5Tokenizer
+from t5_utils import get_texts, clean_text, process_predictions
+from utils import process_file, show_extracted_sentences, download_model
+from transformers import DistilBertTokenizer, T5ForConditionalGeneration, T5Tokenizer
 from torch.utils.data import TensorDataset, Dataset, DataLoader, RandomSampler, SequentialSampler
 
 
@@ -22,12 +23,13 @@ if os.path.exists('./models') is False:
 time.sleep(5)
 
 # BERT Initialzation Section
-class_names = ['Not Req', 'Req']
-model_bert = BertClassifier(len(class_names))
+
+labels = [0,1]
+model_bert = BertClassifier(len(labels))
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model_bert.load_state_dict(torch.load("models/best_model_state.bin", map_location=device))
+model_bert.load_state_dict(deepcopy(torch.load("models/best_model_state.pth", device)))
 model_bert = model_bert.to(device)
-tokenizer_bert = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+tokenizer_bert = DistilBertTokenizer.from_pretrained('distilbert-base-uncased', do_lower_case=True)
 
 # T5 Initialization Section
 type_ = 't5-base'
@@ -35,14 +37,13 @@ checkpoint = 'models/t5'
 model_t5 = T5ForConditionalGeneration.from_pretrained(checkpoint)
 tokenizer_t5 = T5Tokenizer.from_pretrained(type_)
 
-
 # Functions section
 
 def set_header():
     st.title("**Security Requirements Extraction Tool**")
     st.markdown("Short desciption: So far **only** .pdf format is supported by the app. Big documents **are not recommended**.")
     st.markdown("Supported language: English")
-    st.markdown("Used models: BERT(based) and T5")
+    st.markdown("Used models: BERT(distil) and T5")
     st.markdown("Used datasets: PURE, PROMISE")
     st.markdown("Due to the resource limit, this app is unstable.")
     
